@@ -21,7 +21,7 @@
   }
 </script>
 
-<div class="container">
+<div class="align-center flex h-screen flex-1 flex-col justify-center">
   <div>
     <button
       on:click={() => {
@@ -56,23 +56,3 @@
     </form>
   {/if}
 </div>
-
-<style>
-  .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    flex: 1;
-  }
-
-  .container form {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .container div {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-</style>
