@@ -1,7 +1,6 @@
 <script>
   import { authHandlers, authStore } from "../stores/authStore";
   import textLogoBlack from "$lib/images/txt_logo_black.png";
-  import { page } from "$app/stores";
 
   let register = false;
   let email = "";
@@ -12,6 +11,11 @@
   async function handleSubmit() {
     if (!email || !password || (register && !confirmPassword)) {
       errorText = "Please fill missing fields";
+      return;
+    }
+
+    if (register && password.length < 6) {
+      errorText = "Password must be at least 6 characters";
       return;
     }
 
@@ -35,8 +39,9 @@
         console.log(err);
       }
     }
+
     if ($authStore.currentUser) {
-      window.location.href = "/dashboard";
+      window.location.href = "/";
     }
   }
 
@@ -118,7 +123,7 @@
 
     <button
       on:click={handleSubmit}
-      class="m-auto mt-8 rounded-xl bg-black p-8 pb-2 pt-2 text-white"
+      class="m-auto mt-8 rounded-xl bg-black p-8 pb-2 pt-2 font-bold text-white hover:bg-gray-700"
       >{register ? "Sign Up" : "Log In"}</button
     >
   </form>
