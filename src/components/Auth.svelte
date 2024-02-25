@@ -1,5 +1,7 @@
 <script>
   import { authHandlers, authStore } from "../stores/authStore";
+  import textLogoBlack from "$lib/images/txt_logo_black.png";
+  import { page } from "$app/stores";
 
   let register = false;
   let email = "";
@@ -59,9 +61,15 @@
 </script>
 
 <div class="align-center m-auto flex h-screen flex-1 flex-col">
-  <h1 class="m-auto mb-0 text-3xl font-medium">
-    {register ? "Register" : "Welcome Back"}
-  </h1>
+  <div
+    class="m-auto mb-0 flex w-48 cursor-pointer"
+    on:click={() => (window.location.href = "/")}
+    on:keydown={() => {}}
+    role="button"
+    tabindex="0"
+  >
+    <img src={textLogoBlack} alt="txt-logo-black" />
+  </div>
 
   <form class="flex flex-col">
     <label class="m-auto mb-1 mt-8 w-72 rounded border border-black p-1 px-2">
@@ -110,7 +118,7 @@
 
     <button
       on:click={handleSubmit}
-      class="m-auto mt-8 rounded-2xl bg-black p-8 pb-2 pt-2 text-white"
+      class="m-auto mt-8 rounded-xl bg-black p-8 pb-2 pt-2 text-white"
       >{register ? "Sign Up" : "Log In"}</button
     >
   </form>

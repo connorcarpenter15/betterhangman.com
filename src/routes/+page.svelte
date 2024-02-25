@@ -1,5 +1,5 @@
 <script>
-  import Auth from "../components/Auth.svelte";
+  import Header from "../components/Header.svelte";
 </script>
 
-<Auth />
+<Header />
