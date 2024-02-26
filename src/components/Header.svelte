@@ -7,7 +7,9 @@
 <header class="align-center flex flex-1 items-center justify-center bg-black">
   <img src={textLogoWhite} alt="txt-logo-white" class="m-1 ml-10 w-20" />
 
-  <p class="ml-6 font-bold text-white">{$authStore.currentUser?.email}</p>
+  {#if $authStore.currentUser}
+    <p class="ml-6 font-bold text-white">{$authStore.currentUser?.email}</p>
+  {/if}
 
   <nav class="ml-auto">
     <ul class="flex flex-1 items-center justify-center text-white">

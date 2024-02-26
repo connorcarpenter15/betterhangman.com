@@ -3,5 +3,3 @@
 </script>
 
 <Header />
-
-<h1>Play</h1>

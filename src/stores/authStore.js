@@ -17,17 +17,9 @@ export const authStore = writable({
 export const authHandlers = {
   login: async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
-    authStore.update((state) => ({
-      ...state,
-      currentUser: auth.currentUser,
-    }));
   },
   signup: async (email, password) => {
     await createUserWithEmailAndPassword(auth, email, password);
-    authStore.update((state) => ({
-      ...state,
-      currentUser: auth.currentUser,
-    }));
   },
   logout: async () => {
     await signOut(auth);
