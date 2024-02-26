@@ -9,8 +9,7 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "^3.0.0",
-    "@sveltejs/adapter-node": "^4.0.1",
+    "@sveltejs/adapter-auto": "^3.1.1",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "autoprefixer": "^10.4.17",
@@ -21,6 +20,7 @@
   },
   "type": "module",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "firebase": "^10.8.0"
   }
 }
