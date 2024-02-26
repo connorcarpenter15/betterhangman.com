@@ -5,10 +5,24 @@
 </script>
 
 <header class="align-center flex flex-1 items-center justify-center bg-black">
-  <img src={textLogoWhite} alt="txt-logo-white" class="m-1 ml-10 w-20" />
+  <div
+    class="m-1 ml-10 w-20"
+    on:click={() => (window.location.href = "/")}
+    on:keydown={() => {}}
+    role="button"
+    tabindex="0"
+  >
+    <img src={textLogoWhite} alt="txt-logo-white" />
+  </div>
 
   {#if $authStore.currentUser}
-    <p class="ml-6 font-bold text-white">{$authStore.currentUser?.email}</p>
+    <a
+      class="ml-10 font-bold text-white hover:text-blue-100"
+      aria-current={$page.url.pathname === "/account" ? "page" : undefined}
+      href="/account"
+    >
+      {$authStore.currentUser?.email.split("@")[0]}
+    </a>
   {/if}
 
   <nav class="ml-auto">
@@ -30,17 +44,17 @@
           aria-current={$page.url.pathname === "/login" ? "page" : undefined}
           class="mr-6"
         >
-          <a
-            href="/login"
-            class="rounded-xl bg-white px-5 py-2 font-bold text-black hover:bg-blue-100"
-            >Log In</a
+          <button
+            on:click={() => (window.location.href = "/login")}
+            class="w-28 rounded-xl bg-white px-5 py-2 font-bold text-black hover:bg-blue-100"
+            >Log In</button
           >
         </li>
       {:else}
         <li class="mr-6">
           <button
             on:click={authHandlers.logout}
-            class="rounded-xl bg-white px-5 py-2 font-bold text-black hover:bg-blue-100"
+            class="w-28 rounded-xl bg-white px-5 py-2 font-bold text-black hover:bg-blue-100"
             >Log Out</button
           >
         </li>
