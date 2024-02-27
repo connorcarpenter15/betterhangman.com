@@ -1,4 +1,4 @@
-#!/Users/cmaccarp/betterhangman.com/functions/venv/bin/python3.11
+#!/Users/cmaccarp/betterhangman.com/functions/venv/bin/python3.12
 # -*- coding: utf-8 -*-
 # Copyright 2023 Google LLC
 #

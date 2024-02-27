@@ -1,13 +1,9 @@
-// Import the functions you need from the SDKs you need
 import { deleteApp, getApp, getApps, initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getAuth } from "firebase/auth";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
-import { getAuth, setPersistence, inMemoryPersistence } from "firebase/auth";
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
+// for Firebase JS SDK v7.20.0 and later, measurementId is optional
+const config = {
   apiKey: import.meta.env.VITE_APIKEY,
   authDomain: import.meta.env.VITE_AUTHDOMAIN,
   databaseURL: import.meta.env.VITE_DATABASEURL,
@@ -18,15 +14,22 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_MEASUREMENTID,
 };
 
-// Initialize Firebase
-let firebaseApp;
+// initialize Firebase
+let app;
 
+// get auth
 if (!getApps().length) {
-  firebaseApp = initializeApp(firebaseConfig);
+  app = initializeApp(config);
 } else {
-  firebaseApp = getApp();
-  deleteApp(firebaseApp);
-  firebaseApp = initializeApp(firebaseConfig);
+  app = getApp();
+  deleteApp(app);
+  app = initializeApp(config);
 }
 
-export const auth = getAuth(firebaseApp);
+export const auth = getAuth(app);
+
+// get functions
+const functions = getFunctions(app, "us-east1");
+
+export const getRandomWord = httpsCallable(functions, "get_random_word");
+// add other functions

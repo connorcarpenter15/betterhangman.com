@@ -5,7 +5,7 @@
   },
   "functions": [
     {
-      "source": "build",
+      "source": "functions",
       "codebase": "default",
       "ignore": [
         "venv",
