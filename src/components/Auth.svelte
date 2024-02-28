@@ -77,12 +77,12 @@
   </div>
 
   <form class="flex flex-col">
-    <label class="m-auto mb-1 mt-8 w-72 rounded border border-black p-1 px-2">
+    <label class="m-auto mb-1 mt-8 w-72 rounded border border-black py-1 px-2">
       <input bind:value={email} type="email" placeholder="Email" />
     </label>
 
     <label
-      class="align-center m-auto mb-1 mt-1 flex w-72 flex-1 justify-between rounded border border-black p-1 px-2"
+      class="align-center m-auto mb-1 mt-1 flex w-72 flex-1 justify-between rounded border border-black py-1 px-2"
     >
       <input
         value={password}
@@ -98,7 +98,7 @@
 
     {#if register}
       <label
-        class="align-center m-auto mb-2 mt-1 flex w-72 flex-1 justify-between rounded border border-black p-1 px-2"
+        class="align-center m-auto mb-2 mt-1 flex w-72 flex-1 justify-between rounded border border-black py-1 px-2"
       >
         <input
           value={confirmPassword}

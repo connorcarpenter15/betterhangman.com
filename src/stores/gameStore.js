@@ -1,10 +1,4 @@
-import hangmanScaffold from "$lib/images/hangman_scaffold.png";
-import hangmanHead from "$lib/images/hangman_head.png";
-import hangmanBody from "$lib/images/hangman_body.png";
-import hangmanFirstLeg from "$lib/images/hangman_first_leg.png";
-import hangmanSecondLeg from "$lib/images/hangman_second_leg.png";
-import hangmanFirstArm from "$lib/images/hangman_first_arm.png";
-import hangmanSecondArm from "$lib/images/hangman_second_arm.png";
+import hangmanImagesNeutral from "$lib/images/objects/hangmanImagesNeutral.js";
 import { writable } from "svelte/store";
 
 export const gameStore = writable({
@@ -12,14 +6,15 @@ export const gameStore = writable({
   gameOver: false,
   isLoading: false,
   wordToGuess: [],
+  wordDefinition: "",
   guessedWord: [],
   lettersGuessed: [],
   incorrectGuesses: 0,
-  hangmanImage: hangmanScaffold,
+  hangmanImage: hangmanImagesNeutral.scaffold,
 });
 
 export const gameHandlers = {
-  startGame: (word) => {
+  startGame: (word, definition) => {
     word = [...word];
 
     gameStore.update((curr) => {
@@ -27,7 +22,8 @@ export const gameHandlers = {
         ...curr,
         currentGame: true,
         wordToGuess: word,
-        guessedWord: word.map(() => "_"),
+        wordDefinition: definition,
+        guessedWord: word.map((l) => (/[a-zA-Z]/.test(l) ? "" : l)),
       };
     });
   },
@@ -68,7 +64,7 @@ export const gameHandlers = {
         };
       });
 
-      if (guessedWord.every((l) => l !== "_")) {
+      if (guessedWord.every((l) => l)) {
         gameStore.update((curr) => {
           return {
             ...curr,
@@ -85,7 +81,7 @@ export const gameHandlers = {
             return {
               ...curr,
               incorrectGuesses: incorrectGuesses,
-              hangmanImage: hangmanHead,
+              hangmanImage: hangmanImagesNeutral.head,
             };
           });
           break;
@@ -94,7 +90,7 @@ export const gameHandlers = {
             return {
               ...curr,
               incorrectGuesses: incorrectGuesses,
-              hangmanImage: hangmanBody,
+              hangmanImage: hangmanImagesNeutral.body,
             };
           });
           break;
@@ -103,7 +99,7 @@ export const gameHandlers = {
             return {
               ...curr,
               incorrectGuesses: incorrectGuesses,
-              hangmanImage: hangmanFirstLeg,
+              hangmanImage: hangmanImagesNeutral.firstLeg,
             };
           });
           break;
@@ -112,7 +108,7 @@ export const gameHandlers = {
             return {
               ...curr,
               incorrectGuesses: incorrectGuesses,
-              hangmanImage: hangmanSecondLeg,
+              hangmanImage: hangmanImagesNeutral.secondLeg,
             };
           });
           break;
@@ -121,7 +117,7 @@ export const gameHandlers = {
             return {
               ...curr,
               incorrectGuesses: incorrectGuesses,
-              hangmanImage: hangmanFirstArm,
+              hangmanImage: hangmanImagesNeutral.firstArm,
             };
           });
           break;
@@ -131,7 +127,7 @@ export const gameHandlers = {
               ...curr,
               gameOver: true,
               incorrectGuesses: incorrectGuesses,
-              hangmanImage: hangmanSecondArm,
+              hangmanImage: hangmanImagesNeutral.secondArm,
             };
           });
           break;
@@ -147,10 +143,12 @@ export const gameHandlers = {
         currentGame: false,
         gameOver: false,
         isLoading: false,
-        wordToGuess: null,
+        wordToGuess: [],
+        wordDefinition: "",
+        guessedWord: [],
         lettersGuessed: [],
         incorrectGuesses: 0,
-        hangmanImage: hangmanScaffold,
+        hangmanImage: hangmanImagesNeutral.scaffold,
       };
     });
   },
