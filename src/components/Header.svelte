@@ -4,7 +4,9 @@
   import { authHandlers, authStore } from "../stores/authStore";
 </script>
 
-<header class="align-center flex flex-1 items-center justify-center bg-black">
+<header
+  class="align-center flex flex-1 items-center justify-center bg-black absolute w-full"
+>
   <div
     class="m-1 ml-10 w-20"
     on:click={() => (window.location.href = "/")}

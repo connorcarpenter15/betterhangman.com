@@ -9,7 +9,7 @@
 
 <Header />
 
-<div class="flex flex-col items-center justify-center">
+<div class="flex flex-col items-center justify-center h-screen">
   <button
     class="rounded-xl bg-black text-white px-5 py-2 font-bold hover:bg-gray-700 m-10"
     on:click={getRandomWord()

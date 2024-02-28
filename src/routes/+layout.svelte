@@ -3,7 +3,7 @@
 
   import { onMount } from "svelte";
   import { auth } from "../lib/firebase/firebase.client";
-  import { browser } from "$app/environment";
+  // import { browser } from "$app/environment";
   import { authStore } from "../stores/authStore";
 
   onMount(() => {
