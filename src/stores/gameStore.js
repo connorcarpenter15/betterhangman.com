@@ -10,6 +10,7 @@ import { writable } from "svelte/store";
 export const gameStore = writable({
   currentGame: false,
   gameOver: false,
+  isLoading: false,
   wordToGuess: [],
   guessedWord: [],
   lettersGuessed: [],
@@ -19,7 +20,6 @@ export const gameStore = writable({
 
 export const gameHandlers = {
   startGame: (word) => {
-    console.log(word);
     word = [...word];
 
     gameStore.update((curr) => {
@@ -137,6 +137,7 @@ export const gameHandlers = {
         ...curr,
         currentGame: false,
         gameOver: false,
+        isLoading: false,
         wordToGuess: null,
         lettersGuessed: [],
         incorrectGuesses: 0,

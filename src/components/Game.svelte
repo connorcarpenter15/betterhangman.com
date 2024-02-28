@@ -2,28 +2,31 @@
   import { gameStore, gameHandlers } from "../stores/gameStore";
   import { getRandomWord } from "$lib/firebase/firebase.client.js";
 
+  let letterToGuess = null;
+
   function startGame() {
     let randomWord;
     let definition;
     let errorText;
 
+    $gameStore.isLoading = true;
+
     getRandomWord()
       .then((word) => {
-        console.log(word.data.word);
         randomWord = word.data.word;
-        console.log(randomWord);
         definition = word.data.definition;
+        console.log(randomWord);
+
+        gameHandlers.startGame(randomWord);
+        $gameStore.isLoading = false;
       })
       .catch((e) => (errorText = e));
-
-    gameHandlers.startGame(randomWord);
   }
 </script>
 
 <div class="flex justify-center items-center h-screen">
   <div class="w-1/2 flex flex-col justify-center items-center flex-1">
     <img src={$gameStore.hangmanImage} alt="Hangman Scaffold" />
-    <!-- Example button to simulate incorrect guess -->
   </div>
 
   <div class="w-1/2 flex flex-col">
@@ -36,13 +39,38 @@
         >
       </div>
     {:else}
-      <div class="flex flex-col items-center">
-        <h1>Start</h1>
-        {#each $gameStore.wordToGuess as letter}
-          <p>{letter}</p>
+      <h1>Letters Guessed</h1>
+
+      <div class="flex flex-row items-center">
+        {#each $gameStore.lettersGuessed as letter}
+          <p class="m-2">{letter}</p>
         {/each}
-        <h1>End</h1>
       </div>
+
+      <div class="flex flex-row items-center">
+        {#each $gameStore.guessedWord as letter}
+          <p class="m-2">{letter}</p>
+        {/each}
+      </div>
+
+      <div class="flex flex-row items-center">
+        <input
+          bind:value={letterToGuess}
+          on:keydown={(e) => {
+            if (e.key === "Enter" && letterToGuess) {
+              gameHandlers.guessLetter(letterToGuess);
+            }
+            letterToGuess = null;
+          }}
+          class="border-black px-4 py-2 m-4"
+          type="text"
+          placeholder="Guess a letter"
+        />
+      </div>
+    {/if}
+
+    {#if $gameStore.isLoading}
+      <h1>Loading...</h1>
     {/if}
   </div>
 </div>
