@@ -33,30 +33,38 @@ export const gameHandlers = {
   },
 
   guessLetter: (letter) => {
-    gameStore.update((curr) => {
-      return {
-        ...curr,
-        lettersGuessed: [...curr.lettersGuessed, letter],
-      };
-    });
-
     let wordToGuess;
     let guessedWord;
+    let lettersGuessed;
     let incorrectGuesses;
 
     gameStore.subscribe((game) => {
       wordToGuess = game.wordToGuess;
       guessedWord = game.guessedWord;
+      lettersGuessed = game.lettersGuessed;
       incorrectGuesses = game.incorrectGuesses;
     });
 
-    if (letter in wordToGuess) {
+    gameStore.update((curr) => {
+      return {
+        ...curr,
+        lettersGuessed: lettersGuessed.includes(letter)
+          ? lettersGuessed
+          : lettersGuessed.concat(letter),
+      };
+    });
+
+    if (wordToGuess.includes(letter)) {
+      for (let i = 0; i < wordToGuess.length; i++) {
+        if (wordToGuess[i] === letter) {
+          guessedWord[i] = letter;
+        }
+      }
+
       gameStore.update((curr) => {
         return {
           ...curr,
-          guessedWord: curr.wordToGuess.map((l) =>
-            l !== letter || l !== "_" ? l : letter,
-          ),
+          guessedWord: guessedWord,
         };
       });
 
@@ -76,7 +84,7 @@ export const gameHandlers = {
           gameStore.update((curr) => {
             return {
               ...curr,
-              gameOver: true,
+              incorrectGuesses: incorrectGuesses,
               hangmanImage: hangmanHead,
             };
           });
@@ -85,7 +93,7 @@ export const gameHandlers = {
           gameStore.update((curr) => {
             return {
               ...curr,
-              gameOver: true,
+              incorrectGuesses: incorrectGuesses,
               hangmanImage: hangmanBody,
             };
           });
@@ -94,7 +102,7 @@ export const gameHandlers = {
           gameStore.update((curr) => {
             return {
               ...curr,
-              gameOver: true,
+              incorrectGuesses: incorrectGuesses,
               hangmanImage: hangmanFirstLeg,
             };
           });
@@ -103,7 +111,7 @@ export const gameHandlers = {
           gameStore.update((curr) => {
             return {
               ...curr,
-              gameOver: true,
+              incorrectGuesses: incorrectGuesses,
               hangmanImage: hangmanSecondLeg,
             };
           });
@@ -112,7 +120,7 @@ export const gameHandlers = {
           gameStore.update((curr) => {
             return {
               ...curr,
-              gameOver: true,
+              incorrectGuesses: incorrectGuesses,
               hangmanImage: hangmanFirstArm,
             };
           });
@@ -122,6 +130,7 @@ export const gameHandlers = {
             return {
               ...curr,
               gameOver: true,
+              incorrectGuesses: incorrectGuesses,
               hangmanImage: hangmanSecondArm,
             };
           });
