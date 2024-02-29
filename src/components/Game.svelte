@@ -117,7 +117,9 @@
           class="shadow-2xl bg-white p-4 w-1/3 flex flex-col items-center justify-center border-gray-200 border min-h-96"
         >
           <h1 class="font-bold text-2xl m-6">
-            {$gameStore.incorrectGuesses === 6 ? "You lose..." : "You win!"}
+            {$gameStore.guessedWord.every((l) => l !== "")
+              ? "You win!"
+              : "You lose..."}
           </h1>
 
           <table class="m-6">

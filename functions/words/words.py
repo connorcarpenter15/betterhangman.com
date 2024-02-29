@@ -38,7 +38,10 @@ def get_random_word(req: https_fn.CallableRequest):
 
 
 @scheduler_fn.on_schedule(
-    schedule="every day 00:00", region="us-east1", secrets=[WORDNIK_APIKEY]
+    schedule="every day 00:00",
+    region="us-east1",
+    secrets=[WORDNIK_APIKEY],
+    timezone=scheduler_fn.Timezone("America/New_York"),
 )
 def set_word_of_the_day(event: scheduler_fn.ScheduledEvent):
     # get api key from Cloud Secret Manager

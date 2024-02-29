@@ -1,4 +1,4 @@
-import hangmanImagesNeutral from "$lib/images/objects/hangmanImagesNeutral.js";
+import hangmanImagesNeutral from "$lib/images/hangman_neutral/hangmanImagesNeutral.js";
 import { writable } from "svelte/store";
 import {
   getRandomWord,
@@ -170,9 +170,18 @@ export const gameHandlers = {
           gameStore.update((curr) => {
             return {
               ...curr,
-              gameOver: true,
               incorrectGuesses: incorrectGuesses,
               hangmanImage: hangmanImagesNeutral.secondArm,
+            };
+          });
+          break;
+        case 7:
+          gameStore.update((curr) => {
+            return {
+              ...curr,
+              gameOver: true,
+              incorrectGuesses: incorrectGuesses,
+              hangmanImage: hangmanImagesNeutral.face,
             };
           });
           break;
