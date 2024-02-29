@@ -17,7 +17,9 @@
     getRandomWord()
       .then((word) => {
         randomWord = word.data.word.toLowerCase();
-        definition = word.data.definition;
+        definition = Array.isArray(word.data.definition)
+          ? word.data.definition.join("; ")
+          : word.data.definition;
         console.log(randomWord);
 
         // start game in gameStore
@@ -91,8 +93,12 @@
       </div>
 
       <div class="flex mb-16">
-        {#each Array($gameStore.guessedWord.length).fill("") as _}
-          <div class="w-5 h-0.5 bg-black m-1"></div>
+        {#each $gameStore.guessedWord.map( (l) => (/[a-zA-Z]/.test(l) || l === "" ? "" : l), ) as letter}
+          {#if letter === ""}
+            <div class="w-5 h-0.5 bg-black m-1"></div>
+          {:else}
+            <div class="w-5 h-0.5 bg-transparent m-1"></div>
+          {/if}
         {/each}
       </div>
 
