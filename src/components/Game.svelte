@@ -47,23 +47,6 @@
       letterToGuess = null;
     }
   }
-
-  // handle game over popup
-  let showGameOver = false;
-
-  // Function to set showGameOver to true after 2 seconds
-  const delayGameOver = () => {
-    setTimeout(() => {
-      showGameOver = true;
-    }, 700); // 700 milliseconds = 0.7 seconds
-  };
-
-  // Delay showing the popup
-  $: {
-    if ($gameStore.gameOver) {
-      delayGameOver();
-    }
-  }
 </script>
 
 <!-- body wrapper -->
@@ -75,23 +58,23 @@
   <!-- hangman image -->
   <div class="w-1/2 flex flex-col">
     {#if !$gameStore.currentGame && !$gameStore.isLoading}
-      <div class="flex flex-col items-center">
+      <div class="flex flex-col justify-start">
         <button
           on:click={startGame}
-          class="rounded-2xl bg-black px-6 py-3 font-bold text-white hover:bg-gray-700"
+          class="rounded-2xl bg-black px-6 py-3 w-36 font-bold text-white hover:bg-gray-700"
           >New Game</button
         >
       </div>
 
       <!-- game interface -->
     {:else if !$gameStore.isLoading}
-      <h1 class="text-xl mb-4">Letters Guessed</h1>
+      <h1 class="text-xl mb-4">Letters Guessed:</h1>
 
       <!-- icons of guessed letters -->
-      <div class="flex flex-wrap mb-20 w-3/5 items-center">
+      <div class="flex flex-wrap w-3/5 items-center min-h-32 mb-10">
         {#each $gameStore.lettersGuessed as letter}
           <div
-            class="m-2 w-8 h-8 rounded-lg shadow items-center justify-center flex border-black border"
+            class="my-2 mr-4 w-8 h-8 rounded-lg shadow items-center justify-center flex border-black border mb-auto"
           >
             {letter}
           </div>
@@ -99,9 +82,17 @@
       </div>
 
       <!-- current state of guessed word -->
-      <div class="flex flex-wrap mb-20">
+      <div class="flex">
         {#each $gameStore.guessedWord as letter}
-          <p class="m-2">{letter}</p>
+          <div class="w-7 flex justify-center text-xl">
+            {letter !== "" ? letter : " "}
+          </div>
+        {/each}
+      </div>
+
+      <div class="flex mb-16">
+        {#each Array($gameStore.guessedWord.length).fill("") as _}
+          <div class="w-5 h-0.5 bg-black m-1"></div>
         {/each}
       </div>
 
@@ -110,7 +101,7 @@
         <input
           bind:value={letterToGuess}
           on:keydown={(e) => handleGuess(e)}
-          class="border-black px-4 py-1 m-4 border rounded"
+          class="border-black px-4 py-1 my-4 border rounded"
           type="text"
           placeholder="Guess a letter"
         />
@@ -127,13 +118,13 @@
       ></div>
     {/if}
 
-    <!-- dispaly game over popup -->
-    {#if showGameOver}
+    <!-- display game over popup -->
+    {#if $gameStore.gameOver}
       <div
-        class="fixed top-0 left-40 w-full h-full flex items-center justify-center z-50"
+        class="fixed top-0 left-40 w-full h-full flex items-center justify-center"
       >
         <div
-          class="shadow-2xl bg-white p-4 w-1/3 flex flex-col items-center justify-center"
+          class="shadow-2xl bg-white p-4 w-1/3 flex flex-col items-center justify-center border-gray-200 border min-h-96"
         >
           <h1 class="font-bold text-2xl m-6">
             {$gameStore.incorrectGuesses === 6 ? "You lose..." : "You win!"}
@@ -152,7 +143,6 @@
 
           <button
             on:click={() => {
-              showGameOver = false;
               gameHandlers.resetGame();
             }}
             class="rounded-2xl bg-black px-6 py-3 font-bold text-white hover:bg-gray-700 m-6"
