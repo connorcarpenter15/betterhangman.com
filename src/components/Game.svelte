@@ -5,30 +5,6 @@
   let letterToGuess = null;
   let guessStatus = null;
 
-  // handle starting of game
-  function startGame() {
-    let randomWord;
-    let definition;
-    let errorText;
-
-    $gameStore.isLoading = true;
-
-    // retrieve word using cloud function
-    getRandomWord()
-      .then((word) => {
-        randomWord = word.data.word.toLowerCase();
-        definition = Array.isArray(word.data.definition)
-          ? word.data.definition.join("; ")
-          : word.data.definition;
-        console.log(randomWord);
-
-        // start game in gameStore
-        gameHandlers.startGame(randomWord, definition);
-        $gameStore.isLoading = false;
-      })
-      .catch((e) => (errorText = e));
-  }
-
   // handle a guess submit
   function handleGuess(event) {
     // do nothing if game is over
@@ -62,9 +38,17 @@
     {#if !$gameStore.currentGame && !$gameStore.isLoading}
       <div class="flex flex-col justify-start">
         <button
-          on:click={startGame}
-          class="rounded-2xl bg-black px-6 py-3 w-36 font-bold text-white hover:bg-gray-700"
+          on:click={() => gameHandlers.startGame(false)}
+          class="rounded-2xl bg-black px-6 py-3 w-36 font-bold text-white hover:bg-gray-700 m-4"
           >New Game</button
+        >
+      </div>
+
+      <div class="flex flex-col justify-start">
+        <button
+          on:click={() => gameHandlers.startGame(true)}
+          class="rounded-2xl bg-black px-6 py-3 w-36 font-bold text-white hover:bg-gray-700 m-4"
+          >Play Word of the Day</button
         >
       </div>
 

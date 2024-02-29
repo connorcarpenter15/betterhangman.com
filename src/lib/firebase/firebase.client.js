@@ -32,4 +32,4 @@ export const auth = getAuth(app);
 const functions = getFunctions(app, "us-east1");
 
 export const getRandomWord = httpsCallable(functions, "get_random_word");
-// add other functions
+export const getWordOfTheDay = httpsCallable(functions, "get_word_of_the_day");

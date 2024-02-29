@@ -1,6 +1,7 @@
 from firebase_functions.params import SecretParam
-from firebase_functions import https_fn
-from wordnik import swagger, WordsApi, WordApi
+from firebase_functions import https_fn, scheduler_fn
+from firebase_admin import firestore
+import requests
 
 WORDNIK_APIKEY = SecretParam("WORDNIK_APIKEY")
 
@@ -10,17 +11,16 @@ def get_random_word(req: https_fn.CallableRequest):
     # get api key from Cloud Secret Manager
     api_key = WORDNIK_APIKEY.value
 
-    api_url = "https://api.wordnik.com/v4"
+    random_word_url = "https://api.wordnik.com/v4/words.json/randomWord?minLength=6"
+    definition_url = "https://api.wordnik.com/v4/word.json/{}/definitions"
 
-    # create apis
-    client = swagger.ApiClient(api_key, api_url)
-
-    words_api = WordsApi.WordsApi(client)
-    word_api = WordApi.WordApi(client)
-
-    # extract random word and definition
-    random_word = words_api.getRandomWord(minLength=6).word
-    word_definition = word_api.getDefinitions(random_word)
+    # use requests to access api
+    random_word = requests.get(random_word_url, headers={"api_key": api_key}).json()[
+        "word"
+    ]
+    word_definition = requests.get(
+        definition_url.format(random_word), headers={"api_key": api_key}
+    ).json()[0]["text"]
 
     # check if api failed
     if random_word is None or word_definition is None:
@@ -30,25 +30,30 @@ def get_random_word(req: https_fn.CallableRequest):
             message=("Failed to retrieve word."),
         )
 
-    return {"word": random_word, "definition": word_definition[0].text}
+    # select first definition if there are multiple
+    if isinstance(word_definition, list):
+        word_definition = word_definition[0]
+
+    return {"word": random_word, "definition": word_definition}
 
 
-@https_fn.on_call(region="us-east1", secrets=[WORDNIK_APIKEY])
-def get_word_of_the_day(req: https_fn.CallableRequest):
+@scheduler_fn.on_schedule(
+    schedule="every day 00:00", region="us-east1", secrets=[WORDNIK_APIKEY]
+)
+def set_word_of_the_day(event: scheduler_fn.ScheduledEvent):
     # get api key from Cloud Secret Manager
     api_key = WORDNIK_APIKEY.value
 
-    api_url = "https://api.wordnik.com/v4"
+    word_of_the_day_url = "https://api.wordnik.com/v4/words.json/wordOfTheDay"
+    definition_url = "https://api.wordnik.com/v4/word.json/{}/definitions"
 
-    # create apis
-    client = swagger.ApiClient(api_key, api_url)
-
-    words_api = WordsApi.WordsApi(client)
-    word_api = WordApi.WordApi(client)
-
-    # extract word of the day and definition
-    word_of_the_day = words_api.getWordOfTheDay().word
-    word_definition = word_api.getDefinitions(word_of_the_day)
+    # use requests to access api
+    word_of_the_day = requests.get(
+        word_of_the_day_url, headers={"api_key": api_key}
+    ).json()["word"]
+    word_definition = requests.get(
+        definition_url.format(word_of_the_day), headers={"api_key": api_key}
+    ).json()[0]["text"]
 
     # check if api failed
     if word_of_the_day is None or word_definition is None:
@@ -58,4 +63,19 @@ def get_word_of_the_day(req: https_fn.CallableRequest):
             message=("Failed to retrieve word."),
         )
 
-    return {"word": word_of_the_day, "definition": word_definition[0].text}
+    # select first definition if there are multiple
+    if isinstance(word_definition, list):
+        word_definition = word_definition[0]
+
+    db = firestore.client()
+
+    doc_ref = db.collection("words").document("word_of_the_day")
+    doc_ref.set({"word": word_of_the_day, "definition": word_definition})
+
+
+@https_fn.on_call(region="us-east1")
+def get_word_of_the_day(req: https_fn.CallableRequest):
+    db = firestore.client()
+    doc = db.collection("words").document("word_of_the_day").get().to_dict()
+
+    return doc
