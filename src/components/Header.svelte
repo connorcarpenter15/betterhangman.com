@@ -23,7 +23,7 @@
       aria-current={$page.url.pathname === "/account" ? "page" : undefined}
       href="/account"
     >
-      {$authStore.currentUser?.email.split("@")[0]}
+      {$authStore.currentUser?.displayName}
     </a>
   {/if}
 

@@ -19,7 +19,7 @@
     ]
   },
   "_app.js": {
-    "file": "_app/immutable/assets/app.DH_r5l8b.css",
+    "file": "_app/immutable/assets/app.C8MAZx08.css",
     "src": "_app.js"
   },
   "_authStore.js": {
@@ -76,6 +76,34 @@
       "_index.js"
     ]
   },
+  "src/lib/images/hangman_neutral/hangman_body_neutral.png": {
+    "file": "_app/immutable/assets/hangman_body_neutral.od90h9l4.png",
+    "src": "src/lib/images/hangman_neutral/hangman_body_neutral.png"
+  },
+  "src/lib/images/hangman_neutral/hangman_face_neutral.png": {
+    "file": "_app/immutable/assets/hangman_face_neutral.B6TkzGK3.png",
+    "src": "src/lib/images/hangman_neutral/hangman_face_neutral.png"
+  },
+  "src/lib/images/hangman_neutral/hangman_first_arm_neutral.png": {
+    "file": "_app/immutable/assets/hangman_first_arm_neutral.BrlJK4Q9.png",
+    "src": "src/lib/images/hangman_neutral/hangman_first_arm_neutral.png"
+  },
+  "src/lib/images/hangman_neutral/hangman_first_leg_neutral.png": {
+    "file": "_app/immutable/assets/hangman_first_leg_neutral.AzGBVrTd.png",
+    "src": "src/lib/images/hangman_neutral/hangman_first_leg_neutral.png"
+  },
+  "src/lib/images/hangman_neutral/hangman_head_neutral.png": {
+    "file": "_app/immutable/assets/hangman_head_neutral.4aLx9pWe.png",
+    "src": "src/lib/images/hangman_neutral/hangman_head_neutral.png"
+  },
+  "src/lib/images/hangman_neutral/hangman_second_arm_neutral.png": {
+    "file": "_app/immutable/assets/hangman_second_arm_neutral.CM4TNkXe.png",
+    "src": "src/lib/images/hangman_neutral/hangman_second_arm_neutral.png"
+  },
+  "src/lib/images/hangman_neutral/hangman_second_leg_neutral.png": {
+    "file": "_app/immutable/assets/hangman_second_leg_neutral.jg4-QQto.png",
+    "src": "src/lib/images/hangman_neutral/hangman_second_leg_neutral.png"
+  },
   "src/lib/images/txt_logo_black.png": {
     "file": "_app/immutable/assets/txt_logo_black.Dss1TEmA.png",
     "src": "src/lib/images/txt_logo_black.png"
@@ -93,7 +121,7 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.DH_r5l8b.css"
+      "_app/immutable/assets/app.C8MAZx08.css"
     ]
   },
   "src/routes/+page.svelte": {
@@ -105,11 +133,6 @@
       "_Header.js"
     ]
   },
-  "src/routes/+server.js": {
-    "file": "entries/endpoints/_server.js",
-    "src": "src/routes/+server.js",
-    "isEntry": true
-  },
   "src/routes/account/+layout.svelte": {
     "file": "entries/pages/account/_layout.svelte.js",
     "src": "src/routes/account/+layout.svelte",
@@ -119,7 +142,7 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.DH_r5l8b.css"
+      "_app/immutable/assets/app.C8MAZx08.css"
     ]
   },
   "src/routes/account/+page.svelte": {
@@ -140,7 +163,7 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.DH_r5l8b.css"
+      "_app/immutable/assets/app.C8MAZx08.css"
     ]
   },
   "src/routes/login/+page.svelte": {
@@ -160,10 +183,11 @@
     "src": "src/routes/play/+layout.svelte",
     "isEntry": true,
     "imports": [
-      "_ssr.js"
+      "_ssr.js",
+      "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.DH_r5l8b.css"
+      "_app/immutable/assets/app.C8MAZx08.css"
     ]
   },
   "src/routes/play/+page.svelte": {
@@ -172,7 +196,18 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_Header.js"
+      "_Header.js",
+      "_index.js",
+      "_firebase.client.js"
+    ],
+    "assets": [
+      "_app/immutable/assets/hangman_head_neutral.4aLx9pWe.png",
+      "_app/immutable/assets/hangman_body_neutral.od90h9l4.png",
+      "_app/immutable/assets/hangman_first_leg_neutral.AzGBVrTd.png",
+      "_app/immutable/assets/hangman_second_leg_neutral.jg4-QQto.png",
+      "_app/immutable/assets/hangman_first_arm_neutral.BrlJK4Q9.png",
+      "_app/immutable/assets/hangman_second_arm_neutral.CM4TNkXe.png",
+      "_app/immutable/assets/hangman_face_neutral.B6TkzGK3.png"
     ]
   }
 }

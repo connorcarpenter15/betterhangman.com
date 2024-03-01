@@ -8,6 +8,12 @@ WORDNIK_APIKEY = SecretParam("WORDNIK_APIKEY")
 
 @https_fn.on_call(region="us-east1", secrets=[WORDNIK_APIKEY])
 def get_random_word(req: https_fn.CallableRequest):
+    """
+    Triggered on HTTPS request from the frontend. Returns a random word.
+    Args:
+            req: The request object.
+    """
+
     # get api key from Cloud Secret Manager
     api_key = WORDNIK_APIKEY.value
 
@@ -38,12 +44,18 @@ def get_random_word(req: https_fn.CallableRequest):
 
 
 @scheduler_fn.on_schedule(
-    schedule="every day 00:00",
+    schedule="every day 02:00",
     region="us-east1",
     secrets=[WORDNIK_APIKEY],
     timezone=scheduler_fn.Timezone("America/New_York"),
 )
 def set_word_of_the_day(event: scheduler_fn.ScheduledEvent):
+    """
+    Triggerd every day at 2:00 AM. Sets the word of the day in Firestore.
+    Args:
+            event: The event object.
+    """
+
     # get api key from Cloud Secret Manager
     api_key = WORDNIK_APIKEY.value
 
@@ -78,6 +90,12 @@ def set_word_of_the_day(event: scheduler_fn.ScheduledEvent):
 
 @https_fn.on_call(region="us-east1")
 def get_word_of_the_day(req: https_fn.CallableRequest):
+    """
+    Triggered on HTTPS request from the frontend. Returns the word of the day.
+    Args:
+            req: The request object.
+    """
+
     db = firestore.client()
     doc = db.collection("words").document("word_of_the_day").get().to_dict()
 

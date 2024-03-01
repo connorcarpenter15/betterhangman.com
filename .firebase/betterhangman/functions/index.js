@@ -4,7 +4,7 @@ import * as devalue from "devalue";
 import { w as writable, r as readable } from "./chunks/index.js";
 import { parse, serialize } from "cookie";
 import * as set_cookie_parser from "set-cookie-parser";
-const DEV = true;
+const DEV = false;
 const SVELTE_KIT_ASSETS = "/_svelte_kit_assets";
 const ENDPOINT_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"];
 const PAGE_METHODS = ["GET", "POST", "HEAD"];
@@ -174,9 +174,6 @@ function allowed_methods(mod) {
 }
 function static_error_page(options2, status, message) {
   let page = options2.templates.error({ status, message });
-  {
-    page = page.replace("</head>", '<script type="module" src="/@vite/client"><\/script></head>');
-  }
   return text(page, {
     headers: { "content-type": "text/html; charset=utf-8" },
     status
@@ -516,14 +513,6 @@ function try_deserialize(data, fn, route_id) {
     throw error;
   }
 }
-function validate_depends(route_id, dep) {
-  const match = /^(moz-icon|view-source|jar):/.exec(dep);
-  if (match) {
-    console.warn(
-      `${route_id}: Calling \`depends('${dep}')\` will throw an error in Firefox because \`${match[1]}\` is a special URI scheme`
-    );
-  }
-}
 const INVALIDATED_PARAM = "x-sveltekit-invalidated";
 const TRAILING_SLASH_PARAM = "x-sveltekit-trailing-slash";
 function b64_encode(buffer) {
@@ -540,7 +529,6 @@ function b64_encode(buffer) {
 async function load_server_data({ event, state, node, parent }) {
   if (!node?.server)
     return null;
-  let done = false;
   let is_tracking = true;
   const uses = {
     dependencies: /* @__PURE__ */ new Set(),
@@ -553,21 +541,11 @@ async function load_server_data({ event, state, node, parent }) {
   const url = make_trackable(
     event.url,
     () => {
-      if (done && !uses.url) {
-        console.warn(
-          `${node.server_id}: Accessing URL properties in a promise handler after \`load(...)\` has returned will not cause the function to re-run when the URL changes`
-        );
-      }
       if (is_tracking) {
         uses.url = true;
       }
     },
     (param) => {
-      if (done && !uses.search_params.has(param)) {
-        console.warn(
-          `${node.server_id}: Accessing URL properties in a promise handler after \`load(...)\` has returned will not cause the function to re-run when the URL changes`
-        );
-      }
       if (is_tracking) {
         uses.search_params.add(param);
       }
@@ -579,38 +557,18 @@ async function load_server_data({ event, state, node, parent }) {
   const result = await node.server.load?.call(null, {
     ...event,
     fetch: (info, init2) => {
-      const url2 = new URL(info instanceof Request ? info.url : info, event.url);
-      if (done && !uses.dependencies.has(url2.href)) {
-        console.warn(
-          `${node.server_id}: Calling \`event.fetch(...)\` in a promise handler after \`load(...)\` has returned will not cause the function to re-run when the dependency is invalidated`
-        );
-      }
+      new URL(info instanceof Request ? info.url : info, event.url);
       return event.fetch(info, init2);
     },
     /** @param {string[]} deps */
     depends: (...deps) => {
       for (const dep of deps) {
         const { href } = new URL(dep, event.url);
-        {
-          validate_depends(node.server_id, dep);
-          if (done && !uses.dependencies.has(href)) {
-            console.warn(
-              `${node.server_id}: Calling \`depends(...)\` in a promise handler after \`load(...)\` has returned will not cause the function to re-run when the dependency is invalidated`
-            );
-          }
-        }
         uses.dependencies.add(href);
       }
     },
     params: new Proxy(event.params, {
       get: (target, key2) => {
-        if (done && typeof key2 === "string" && !uses.params.has(key2)) {
-          console.warn(
-            `${node.server_id}: Accessing \`params.${String(
-              key2
-            )}\` in a promise handler after \`load(...)\` has returned will not cause the function to re-run when the param changes`
-          );
-        }
         if (is_tracking) {
           uses.params.add(key2);
         }
@@ -621,11 +579,6 @@ async function load_server_data({ event, state, node, parent }) {
       }
     }),
     parent: async () => {
-      if (done && !uses.parent) {
-        console.warn(
-          `${node.server_id}: Calling \`parent(...)\` in a promise handler after \`load(...)\` has returned will not cause the function to re-run when parent data changes`
-        );
-      }
       if (is_tracking) {
         uses.parent = true;
       }
@@ -633,13 +586,6 @@ async function load_server_data({ event, state, node, parent }) {
     },
     route: new Proxy(event.route, {
       get: (target, key2) => {
-        if (done && typeof key2 === "string" && !uses.route) {
-          console.warn(
-            `${node.server_id}: Accessing \`route.${String(
-              key2
-            )}\` in a promise handler after \`load(...)\` has returned will not cause the function to re-run when the route changes`
-          );
-        }
         if (is_tracking) {
           uses.route = true;
         }
@@ -659,7 +605,6 @@ async function load_server_data({ event, state, node, parent }) {
       }
     }
   });
-  done = true;
   return {
     type: "data",
     data: result ?? null,
@@ -1623,21 +1568,6 @@ ${indent}}`);
   }) || "";
   if (!chunks) {
     headers2.set("etag", `"${hash(transformed)}"`);
-  }
-  {
-    if (page_config.csr) {
-      if (transformed.split("<!--").length < html.split("<!--").length) {
-        console.warn(
-          "\x1B[1m\x1B[31mRemoving comments in transformPageChunk can break Svelte's hydration\x1B[39m\x1B[22m"
-        );
-      }
-    } else {
-      if (chunks) {
-        console.warn(
-          "\x1B[1m\x1B[31mReturning promises from server `load` functions will only work if `csr === true`\x1B[39m\x1B[22m"
-        );
-      }
-    }
   }
   return !chunks ? text(transformed, {
     status,
@@ -2689,47 +2619,14 @@ async function respond(request, options2, manifest, state) {
         trailing_slash = "always";
       } else if (route.page) {
         const nodes = await load_page_nodes(route.page, manifest);
-        if (DEV) {
-          const layouts = nodes.slice(0, -1);
-          const page = nodes.at(-1);
-          for (const layout of layouts) {
-            if (layout) {
-              validate_layout_server_exports(
-                layout.server,
-                /** @type {string} */
-                layout.server_id
-              );
-              validate_layout_exports(
-                layout.universal,
-                /** @type {string} */
-                layout.universal_id
-              );
-            }
-          }
-          if (page) {
-            validate_page_server_exports(
-              page.server,
-              /** @type {string} */
-              page.server_id
-            );
-            validate_page_exports(
-              page.universal,
-              /** @type {string} */
-              page.universal_id
-            );
-          }
-        }
+        if (DEV)
+          ;
         trailing_slash = get_option(nodes, "trailingSlash");
       } else if (route.endpoint) {
         const node = await route.endpoint();
         trailing_slash = node.trailingSlash;
-        if (DEV) {
-          validate_server_exports(
-            node,
-            /** @type {string} */
-            route.endpoint_id
-          );
-        }
+        if (DEV)
+          ;
       }
       if (!is_data_request) {
         const normalized = normalize_path(url.pathname, trailing_slash ?? "never");
@@ -3036,15 +2933,7 @@ class Server {
         };
       } catch (error) {
         {
-          this.#options.hooks = {
-            handle: () => {
-              throw error;
-            },
-            handleError: ({ error: error2 }) => console.error(error2),
-            handleFetch: ({ request, fetch: fetch2 }) => fetch2(request),
-            reroute: () => {
-            }
-          };
+          throw error;
         }
       }
     }

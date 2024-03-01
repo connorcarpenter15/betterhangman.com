@@ -1,6 +1,5 @@
 <script>
   import { gameStore, gameHandlers } from "../stores/gameStore";
-  import { getRandomWord } from "$lib/firebase/firebase.client.js";
 
   let letterToGuess = null;
   let guessStatus = null;
@@ -9,18 +8,22 @@
   function handleGuess(event) {
     // do nothing if game is over
     if ($gameStore.gameOver) {
+      guessStatus = null;
       return;
     }
 
     // evaluate gameHanders if enter key
     if (event.key === "Enter" && letterToGuess) {
-      if (letterToGuess.length > 1) {
-        for (let i = 0; i < letterToGuess.length; i++) {
-          gameHandlers.guessLetter(letterToGuess[i]);
+      // reset guess error status
+      guessStatus = null;
+
+      letterToGuess.split("").forEach((l) => {
+        if (/[a-zA-Z]/.test(l) && !$gameStore.lettersGuessed.includes(l)) {
+          gameHandlers.guessLetter(l.toLowerCase());
+        } else {
+          guessStatus = `"${l}" is not a valid guess.`;
         }
-      } else {
-        gameHandlers.guessLetter(letterToGuess);
-      }
+      });
 
       letterToGuess = null;
     }

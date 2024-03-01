@@ -4,12 +4,13 @@
 
   let register = false;
   let email = "";
+  let username = "";
   let password = "";
   let confirmPassword = "";
   let errorText = "";
 
   async function handleSubmit() {
-    if (!email || !password || (register && !confirmPassword)) {
+    if (!email || !password || (register && (!confirmPassword || !username))) {
       errorText = "Please fill missing fields";
       return;
     }
@@ -26,7 +27,7 @@
 
     if (register && password === confirmPassword) {
       try {
-        await authHandlers.signup(email, password);
+        await authHandlers.signup(email, password, username);
         errorText = "";
       } catch (err) {
         console.log(err);
@@ -60,6 +61,7 @@
     register = !register;
     errorText = "";
     email = "";
+    username = "";
     password = "";
     confirmPassword = "";
   }
@@ -81,8 +83,14 @@
       <input bind:value={email} type="email" placeholder="Email" />
     </label>
 
+    {#if register}
+      <label class="m-auto my-1 w-72 rounded border border-black py-1 px-2">
+        <input bind:value={username} type="text" placeholder="Username" />
+      </label>
+    {/if}
+
     <label
-      class="align-center m-auto mb-1 mt-1 flex w-72 flex-1 justify-between rounded border border-black py-1 px-2"
+      class="align-center m-auto my-1 flex w-72 flex-1 justify-between rounded border border-black py-1 px-2"
     >
       <input
         value={password}

@@ -1,6 +1,7 @@
 import { getApps, initializeApp, getApp, deleteApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-const firebaseConfig = {
+import { getFunctions, httpsCallable } from "firebase/functions";
+const config = {
   apiKey: "AIzaSyAonMzUll2H5IZQ-HzoOiNO-NwcEr001Pw",
   authDomain: "betterhangman.firebaseapp.com",
   databaseURL: "https://betterhangman-default-rtdb.firebaseio.com",
@@ -10,12 +11,15 @@ const firebaseConfig = {
   appId: "1:999267313797:web:9b6b2ecb73305848a561ec",
   measurementId: "G-J774GFZNCV"
 };
-let firebaseApp;
+let app;
 if (!getApps().length) {
-  firebaseApp = initializeApp(firebaseConfig);
+  app = initializeApp(config);
 } else {
-  firebaseApp = getApp();
-  deleteApp(firebaseApp);
-  firebaseApp = initializeApp(firebaseConfig);
+  app = getApp();
+  deleteApp(app);
+  app = initializeApp(config);
 }
-getAuth(firebaseApp);
+getAuth(app);
+const functions = getFunctions(app, "us-east1");
+httpsCallable(functions, "get_random_word");
+httpsCallable(functions, "get_word_of_the_day");

@@ -10,7 +10,7 @@ return {
 	assets: new Set(["txt_logo_black.png"]),
 	mimeTypes: {".png":"image/png"},
 	_: {
-		client: {"start":"_app/immutable/entry/start.BfVyPmcx.js","app":"_app/immutable/entry/app.CRfOycX6.js","imports":["_app/immutable/entry/start.BfVyPmcx.js","_app/immutable/chunks/entry.W5OmmNib.js","_app/immutable/chunks/scheduler.E9WtA0gz.js","_app/immutable/chunks/index.TUog-yQb.js","_app/immutable/entry/app.CRfOycX6.js","_app/immutable/chunks/scheduler.E9WtA0gz.js","_app/immutable/chunks/index.DCxFLS1H.js","_app/immutable/chunks/index.Bt-Xh7oU.js"],"stylesheets":[],"fonts":[],"uses_env_dynamic_public":false},
+		client: {"start":"_app/immutable/entry/start.DXO1oc7b.js","app":"_app/immutable/entry/app.BLFdviz-.js","imports":["_app/immutable/entry/start.DXO1oc7b.js","_app/immutable/chunks/entry.B_81u2ot.js","_app/immutable/chunks/scheduler.W2pu3yam.js","_app/immutable/chunks/index.CsZRq24C.js","_app/immutable/entry/app.BLFdviz-.js","_app/immutable/chunks/scheduler.W2pu3yam.js","_app/immutable/chunks/index.DN7Npxtq.js"],"stylesheets":[],"fonts":[],"uses_env_dynamic_public":false},
 		nodes: [
 			__memo(() => import('./nodes/0.js')),
 			__memo(() => import('./nodes/1.js')),
@@ -28,7 +28,7 @@ return {
 				pattern: /^\/$/,
 				params: [],
 				page: { layouts: [0,], errors: [1,], leaf: 5 },
-				endpoint: __memo(() => import('./entries/endpoints/_server.js'))
+				endpoint: null
 			},
 			{
 				id: "/account",
