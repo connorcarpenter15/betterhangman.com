@@ -7,7 +7,10 @@ import {
 } from "firebase/auth";
 import { writable } from "svelte/store";
 import { auth } from "$lib/firebase/firebase.client";
-import { createUser } from "$lib/firebase/firebase.client.js";
+import {
+  createUser,
+  checkUsernameAvailability,
+} from "$lib/firebase/firebase.client.js";
 
 export const authStore = writable({
   isLoading: true,
@@ -55,5 +58,11 @@ export const authHandlers = {
 
   updatePassword: async (password) => {
     await updatePassword(auth.currentUser, password);
+  },
+
+  checkUsernameAvailability: async (username) => {
+    const result = await checkUsernameAvailability({ username: username });
+
+    return result.data;
   },
 };

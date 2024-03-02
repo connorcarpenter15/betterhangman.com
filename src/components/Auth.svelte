@@ -10,22 +10,33 @@
   let errorText = "";
 
   async function handleSubmit() {
+    // check that all fields are filled
     if (!email || !password || (register && (!confirmPassword || !username))) {
       errorText = "Please fill missing fields";
       return;
     }
 
+    // check username availability
+    if (register && !(await authHandlers.checkUsernameAvailability(username))) {
+      errorText = "Username not available. Please choose another.";
+      return;
+    }
+
+    // check password is minimum length
     if (register && password.length < 6) {
       errorText = "Password must be at least 6 characters";
       return;
     }
 
+    // check that passwords match on register
     if (register && password !== confirmPassword) {
       errorText = "Passwords do not match";
       return;
     }
 
+    // handle signup/login
     if (register && password === confirmPassword) {
+      // check that username is available and signup
       try {
         await authHandlers.signup(email, password, username);
         errorText = "";
@@ -33,6 +44,7 @@
         console.log(err);
       }
     } else {
+      // login if not register
       try {
         await authHandlers.login(email, password);
         errorText = "";
@@ -41,6 +53,7 @@
       }
     }
 
+    // redirect to home page after login
     if ($authStore.currentUser) {
       window.location.href = "/";
     }
