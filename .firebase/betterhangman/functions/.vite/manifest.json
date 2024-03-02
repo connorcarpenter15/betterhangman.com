@@ -19,7 +19,7 @@
     ]
   },
   "_app.js": {
-    "file": "_app/immutable/assets/app.C8MAZx08.css",
+    "file": "_app/immutable/assets/app.Cr_TgnRH.css",
     "src": "_app.js"
   },
   "_authStore.js": {
@@ -121,7 +121,7 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.C8MAZx08.css"
+      "_app/immutable/assets/app.Cr_TgnRH.css"
     ]
   },
   "src/routes/+page.svelte": {
@@ -142,7 +142,7 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.C8MAZx08.css"
+      "_app/immutable/assets/app.Cr_TgnRH.css"
     ]
   },
   "src/routes/account/+page.svelte": {
@@ -163,7 +163,7 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.C8MAZx08.css"
+      "_app/immutable/assets/app.Cr_TgnRH.css"
     ]
   },
   "src/routes/login/+page.svelte": {
@@ -187,7 +187,7 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.C8MAZx08.css"
+      "_app/immutable/assets/app.Cr_TgnRH.css"
     ]
   },
   "src/routes/play/+page.svelte": {

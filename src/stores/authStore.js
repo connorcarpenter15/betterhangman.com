@@ -1,14 +1,13 @@
 import {
-  createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updateEmail,
   updatePassword,
-  updateProfile,
 } from "firebase/auth";
 import { writable } from "svelte/store";
 import { auth } from "$lib/firebase/firebase.client";
+import { createUser } from "$lib/firebase/firebase.client.js";
 
 export const authStore = writable({
   isLoading: true,
@@ -21,16 +20,13 @@ export const authHandlers = {
   },
 
   signup: async (email, password, username) => {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    );
-    const user = userCredential.user;
-
-    await updateProfile(user, {
-      displayName: username,
+    await createUser({
+      email: email,
+      password: password,
+      username: username,
     });
+
+    await signInWithEmailAndPassword(auth, email, password);
   },
 
   logout: async () => {
