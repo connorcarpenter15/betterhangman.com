@@ -151,7 +151,8 @@
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_Header.js"
+      "_Header.js",
+      "_firebase.client.js"
     ]
   },
   "src/routes/login/+layout.svelte": {

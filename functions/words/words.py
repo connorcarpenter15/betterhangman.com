@@ -86,17 +86,3 @@ def set_word_of_the_day(event: scheduler_fn.ScheduledEvent):
 
     doc_ref = db.collection("words").document("word_of_the_day")
     doc_ref.set({"word": word_of_the_day, "definition": word_definition})
-
-
-@https_fn.on_call(region="us-east1")
-def get_word_of_the_day(req: https_fn.CallableRequest):
-    """
-    Triggered on HTTPS request from the frontend. Returns the word of the day.
-    Args:
-            req: The request object.
-    """
-
-    db = firestore.client()
-    doc = db.collection("words").document("word_of_the_day").get().to_dict()
-
-    return doc

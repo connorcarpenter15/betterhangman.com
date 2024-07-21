@@ -1,6 +1,7 @@
 import { getApps, initializeApp, getApp, deleteApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { getFirestore } from "firebase/firestore";
 const config = {
   apiKey: "AIzaSyAonMzUll2H5IZQ-HzoOiNO-NwcEr001Pw",
   authDomain: "betterhangman.firebaseapp.com",
@@ -20,12 +21,7 @@ if (!getApps().length) {
   app = initializeApp(config);
 }
 getAuth(app);
+getFirestore(app);
 const functions = getFunctions(app, "us-east1");
 httpsCallable(functions, "get_random_word");
-httpsCallable(functions, "get_word_of_the_day");
 httpsCallable(functions, "create_user");
-httpsCallable(
-  functions,
-  "check_username_availability"
-);
-httpsCallable(functions, "update_user_data");
