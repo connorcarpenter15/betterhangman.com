@@ -5,5 +5,10 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if false;
     }
+
+    match /words/word_of_the_day {
+      allow read: if true;
+    }
   }
 }
+

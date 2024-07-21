@@ -29,7 +29,8 @@ const gameStore = writable({
   guessedWord: [],
   lettersGuessed: [],
   incorrectGuesses: 0,
-  hangmanImage: hangmanImagesNeutral.scaffold
+  hangmanImage: hangmanImagesNeutral.scaffold,
+  dailyPuzzle: false
 });
 const Game = create_ssr_component(($$result, $$props, $$bindings, slots) => {
   let $gameStore, $$unsubscribe_gameStore;

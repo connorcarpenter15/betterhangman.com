@@ -6,11 +6,8 @@ import {
   updatePassword,
 } from "firebase/auth";
 import { writable } from "svelte/store";
-import { auth } from "$lib/firebase/firebase.client";
-import {
-  createUser,
-  checkUsernameAvailability,
-} from "$lib/firebase/firebase.client.js";
+import { auth, createUser, db } from "$lib/firebase/firebase.client.js";
+import { collection, getDocs } from "firebase/firestore";
 
 export const authStore = writable({
   isLoading: true,
@@ -61,8 +58,12 @@ export const authHandlers = {
   },
 
   checkUsernameAvailability: async (username) => {
-    const result = await checkUsernameAvailability({ username: username });
+    const querySnapshot = await getDocs(collection(db, "users"));
 
-    return result.data;
+    console.log("testing");
+
+    querySnapshot.forEach((doc) => {
+      console.log(doc);
+    });
   },
 };

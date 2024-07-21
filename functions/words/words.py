@@ -44,7 +44,7 @@ def get_random_word(req: https_fn.CallableRequest):
 
 
 @scheduler_fn.on_schedule(
-    schedule="every day 02:00",
+    schedule="every day 05:00",
     region="us-east1",
     secrets=[WORDNIK_APIKEY],
     timezone=scheduler_fn.Timezone("America/New_York"),

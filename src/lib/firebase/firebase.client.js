@@ -1,6 +1,7 @@
 import { deleteApp, getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFunctions, httpsCallable } from "firebase/functions";
+import { getFirestore } from "firebase/firestore";
 
 // for Firebase JS SDK v7.20.0 and later, measurementId is optional
 const config = {
@@ -27,14 +28,10 @@ if (!getApps().length) {
 }
 
 export const auth = getAuth(app);
+export const db = getFirestore(app);
 
 // get functions
 const functions = getFunctions(app, "us-east1");
 
 export const getRandomWord = httpsCallable(functions, "get_random_word");
-export const getWordOfTheDay = httpsCallable(functions, "get_word_of_the_day");
 export const createUser = httpsCallable(functions, "create_user");
-export const checkUsernameAvailability = httpsCallable(
-  functions,
-  "check_username_availability",
-);

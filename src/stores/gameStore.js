@@ -1,9 +1,7 @@
 import hangmanImagesNeutral from "$lib/images/hangman_neutral/hangmanImagesNeutral.js";
 import { writable } from "svelte/store";
-import {
-  getRandomWord,
-  getWordOfTheDay,
-} from "$lib/firebase/firebase.client.js";
+import { getRandomWord, auth, db } from "$lib/firebase/firebase.client.js";
+import { doc, getDoc } from "firebase/firestore";
 
 export const gameStore = writable({
   currentGame: false,
@@ -15,12 +13,14 @@ export const gameStore = writable({
   lettersGuessed: [],
   incorrectGuesses: 0,
   hangmanImage: hangmanImagesNeutral.scaffold,
+  dailyPuzzle: false,
 });
 
 export const gameHandlers = {
   startGame: async (isWordOfTheDay = false) => {
     let word;
     let definition;
+    let wordResponse;
     let errorText;
 
     // set loading to true for word retrieval
@@ -28,23 +28,28 @@ export const gameHandlers = {
       return {
         ...curr,
         isLoading: true,
+        dailyPuzzle: isWordOfTheDay,
       };
     });
 
     try {
       // call appropriate function based on word of the day or random
-      const wordPromise = isWordOfTheDay ? getWordOfTheDay() : getRandomWord();
+      if (isWordOfTheDay) {
+        const wordPromise = await getDoc(doc(db, "words", "word_of_the_day"));
+        wordResponse = wordPromise.data();
+      } else {
+        const wordPromise = getRandomWord();
 
-      // Wait for both word retrieval and word mapping
-      const [wordResponse] = await Promise.all([wordPromise]);
+        // Wait for both word retrieval and word mapping
+        [wordResponse] = await Promise.all([wordPromise]);
+        wordResponse = wordResponse.data;
+      }
 
       // Extract word and definition from the response
-      word = wordResponse.data.word.toLowerCase();
-      definition = Array.isArray(wordResponse.data.definition)
-        ? wordResponse.data.definition.join("; ")
-        : wordResponse.data.definition;
-
-      console.log(word);
+      word = wordResponse.word.toLowerCase();
+      definition = Array.isArray(wordResponse.definition)
+        ? wordResponse.definition.join("; ")
+        : wordResponse.definition;
 
       // map word to array
       word = [...word];
@@ -110,12 +115,7 @@ export const gameHandlers = {
       });
 
       if (guessedWord.every((l) => l)) {
-        gameStore.update((curr) => {
-          return {
-            ...curr,
-            gameOver: true,
-          };
-        });
+        gameHandlers.endGame(true);
       }
     } else {
       incorrectGuesses = incorrectGuesses + 1;
@@ -179,15 +179,37 @@ export const gameHandlers = {
           gameStore.update((curr) => {
             return {
               ...curr,
-              gameOver: true,
               incorrectGuesses: incorrectGuesses,
               hangmanImage: hangmanImagesNeutral.face,
             };
           });
+
+          gameHandlers.endGame(false);
           break;
         default:
       }
     }
+  },
+
+  endGame: (result = false) => {
+    gameStore.update((curr) => {
+      return {
+        ...curr,
+        gameOver: true,
+      };
+    });
+
+    let dailyPuzzle;
+
+    gameStore.subscribe((game) => {
+      dailyPuzzle = game.dailyPuzzle;
+    });
+
+    // updateUserData({
+    //   user: auth.currentUser.uid,
+    //   result: result,
+    //   dailyPuzzle: dailyPuzzle,
+    // });
   },
 
   resetGame: () => {
@@ -203,6 +225,7 @@ export const gameHandlers = {
         lettersGuessed: [],
         incorrectGuesses: 0,
         hangmanImage: hangmanImagesNeutral.scaffold,
+        dailyPuzzle: false,
       };
     });
   },

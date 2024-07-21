@@ -9,9 +9,7 @@ def create_user(req: https_fn.CallableRequest):
     Firebase Auth and stores user data in Firestore.
 
     Args:
-        req: The request object.
-    """
-
+        req: The request object."""
     user_data = req.data
 
     username = user_data.get("username")
@@ -34,6 +32,7 @@ def create_user(req: https_fn.CallableRequest):
                 "gamesPlayed": 0,
                 "wins": 0,
                 "losses": 0,
+                "dailyStreak": 0,
             }
         )
 
@@ -66,3 +65,74 @@ def check_username_availability(req: https_fn.CallableRequest):
         return True
     else:
         return False
+
+
+@https_fn.on_call(region="us-east1")
+def update_user_data(req: https_fn.CallableRequest):
+    """
+    Triggered on HTTPS request from the frontend. Updates user data in
+    Firestore.
+
+    Args:
+        req: The request object.
+    """
+
+    user_data = req.data
+    uid = user_data.get("user")
+    result = user_data.get("result")
+    daily_puzzle = user_data.get("dailyPuzzle")
+
+    db = firestore.client()
+
+    users_ref = db.collection("users")
+
+    if result and daily_puzzle:
+        users_ref.document(uid).update(
+            {
+                "gamesPlayed": firestore.Increment(1),
+                "wins": firestore.Increment(1),
+                "dailyStreak": firestore.Increment(1),
+            }
+        )
+    elif result and not daily_puzzle:
+        users_ref.document(uid).update(
+            {
+                "gamesPlayed": firestore.Increment(1),
+                "wins": firestore.Increment(1),
+            }
+        )
+    elif not result and daily_puzzle:
+        users_ref.document(uid).update(
+            {
+                "gamesPlayed": firestore.Increment(1),
+                "losses": firestore.Increment(1),
+                "dailyStreak": 0,
+            }
+        )
+    else:
+        users_ref.document(uid).update(
+            {
+                "gamesPlayed": firestore.Increment(1),
+                "losses": firestore.Increment(1),
+            }
+        )
+
+
+@https_fn.on_call(region="us-east1")
+def get_user_data(req: https_fn.CallableRequest):
+    """
+    Triggered on HTTPS request from the frontend. Returns user data from
+    Firestore.
+
+    Args:
+        req: The request object.
+    """
+
+    user_id = req.data.get("user")
+
+    db = firestore.client()
+
+    users_ref = db.collection("users")
+    user_data = users_ref.document(user_id).get().to_dict()
+
+    return user_data

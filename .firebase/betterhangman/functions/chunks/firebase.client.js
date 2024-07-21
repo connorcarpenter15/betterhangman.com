@@ -23,3 +23,9 @@ getAuth(app);
 const functions = getFunctions(app, "us-east1");
 httpsCallable(functions, "get_random_word");
 httpsCallable(functions, "get_word_of_the_day");
+httpsCallable(functions, "create_user");
+httpsCallable(
+  functions,
+  "check_username_availability"
+);
+httpsCallable(functions, "update_user_data");
