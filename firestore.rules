@@ -6,7 +6,7 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
-    match /words/word_of_the_day {
+    match /words/dailyWord {
       allow read: if true;
     }
   }

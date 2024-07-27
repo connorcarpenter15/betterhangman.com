@@ -51,7 +51,7 @@
         <button
           on:click={() => gameHandlers.startGame(true)}
           class="rounded-2xl bg-black px-6 py-3 w-36 font-bold text-white hover:bg-gray-700 m-4"
-          >Play Word of the Day</button
+          >Play Daily Word</button
         >
       </div>
 

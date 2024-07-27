@@ -35,3 +35,7 @@ const functions = getFunctions(app, "us-east1");
 
 export const getRandomWord = httpsCallable(functions, "get_random_word");
 export const createUser = httpsCallable(functions, "create_user");
+export const checkUsernameAvailability = httpsCallable(
+  functions,
+  "check_username_availability",
+);

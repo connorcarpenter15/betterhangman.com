@@ -12,12 +12,12 @@ export const gameStore = writable({
   guessedWord: [],
   lettersGuessed: [],
   incorrectGuesses: 0,
-  hangmanImage: hangmanImagesNeutral.scaffold,
-  dailyPuzzle: false,
+  hangmanImage: hangmanImagesNeutral.face,
+  dailyWord: false,
 });
 
 export const gameHandlers = {
-  startGame: async (isWordOfTheDay = false) => {
+  startGame: async (isDailyWord = false) => {
     let word;
     let definition;
     let wordResponse;
@@ -28,14 +28,15 @@ export const gameHandlers = {
       return {
         ...curr,
         isLoading: true,
-        dailyPuzzle: isWordOfTheDay,
+        hangmanImage: hangmanImagesNeutral.scaffold,
+        dailyWord: isDailyWord,
       };
     });
 
     try {
       // call appropriate function based on word of the day or random
-      if (isWordOfTheDay) {
-        const wordPromise = await getDoc(doc(db, "words", "word_of_the_day"));
+      if (isDailyWord) {
+        const wordPromise = await getDoc(doc(db, "words", "dailyWord"));
         wordResponse = wordPromise.data();
       } else {
         const wordPromise = getRandomWord();
@@ -202,7 +203,7 @@ export const gameHandlers = {
     let dailyPuzzle;
 
     gameStore.subscribe((game) => {
-      dailyPuzzle = game.dailyPuzzle;
+      dailyPuzzle = game.dailyWord;
     });
 
     // updateUserData({
@@ -225,7 +226,7 @@ export const gameHandlers = {
         lettersGuessed: [],
         incorrectGuesses: 0,
         hangmanImage: hangmanImagesNeutral.scaffold,
-        dailyPuzzle: false,
+        dailyWord: false,
       };
     });
   },

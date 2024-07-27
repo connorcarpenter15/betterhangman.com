@@ -40,3 +40,26 @@ def create_user(req: https_fn.CallableRequest):
 
     except Exception as e:
         return {"success": False, "error": str(e)}
+
+
+@https_fn.on_call(region="us-east1")
+def check_username_availability(req: https_fn.CallableRequest):
+    """
+    Triggered on HTTPS request from the frontend. Checks if a username is
+    available.
+    Args:
+        req: The request object.
+    Returns:
+        True: The username is available.
+        False: The username is not available.
+    """
+
+    username = req.data.get("username")
+
+    db = firestore.client()
+    docs = db.collection("users").where("username", "==", username).stream()
+
+    if len(list(docs)) == 0:
+        return True
+    else:
+        return False

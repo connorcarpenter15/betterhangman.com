@@ -49,7 +49,7 @@ def get_random_word(req: https_fn.CallableRequest):
     secrets=[WORDNIK_APIKEY],
     timezone=scheduler_fn.Timezone("America/New_York"),
 )
-def set_word_of_the_day(event: scheduler_fn.ScheduledEvent):
+def set_daily_word(event: scheduler_fn.ScheduledEvent):
     """
     Triggerd every day at 2:00 AM. Sets the word of the day in Firestore.
     Args:
@@ -59,19 +59,19 @@ def set_word_of_the_day(event: scheduler_fn.ScheduledEvent):
     # get api key from Cloud Secret Manager
     api_key = WORDNIK_APIKEY.value
 
-    word_of_the_day_url = "https://api.wordnik.com/v4/words.json/wordOfTheDay"
+    daily_word_url = "https://api.wordnik.com/v4/words.json/wordOfTheDay"
     definition_url = "https://api.wordnik.com/v4/word.json/{}/definitions"
 
     # use requests to access api
-    word_of_the_day = requests.get(
-        word_of_the_day_url, headers={"api_key": api_key}
-    ).json()["word"]
+    daily_word = requests.get(daily_word_url, headers={"api_key": api_key}).json()[
+        "word"
+    ]
     word_definition = requests.get(
-        definition_url.format(word_of_the_day), headers={"api_key": api_key}
+        definition_url.format(daily_word), headers={"api_key": api_key}
     ).json()[0]["text"]
 
     # check if api failed
-    if word_of_the_day is None or word_definition is None:
+    if daily_word is None or word_definition is None:
         # throw an HttpsError
         raise https_fn.HttpsError(
             code=https_fn.FunctionsErrorCode.NOT_FOUND,
@@ -84,5 +84,5 @@ def set_word_of_the_day(event: scheduler_fn.ScheduledEvent):
 
     db = firestore.client()
 
-    doc_ref = db.collection("words").document("word_of_the_day")
-    doc_ref.set({"word": word_of_the_day, "definition": word_definition})
+    doc_ref = db.collection("words").document("dailyWord")
+    doc_ref.set({"word": daily_word, "definition": word_definition})
