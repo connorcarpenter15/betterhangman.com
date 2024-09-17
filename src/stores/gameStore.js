@@ -12,7 +12,7 @@ export const gameStore = writable({
   guessedWord: [],
   lettersGuessed: [],
   incorrectGuesses: 0,
-  hangmanImage: hangmanImagesNeutral.face,
+  hangmanImage: hangmanImagesNeutral.scaffold,
   dailyWord: false,
 });
 
