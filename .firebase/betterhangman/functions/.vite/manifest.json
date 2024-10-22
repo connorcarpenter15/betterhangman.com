@@ -1,6 +1,7 @@
 {
   ".svelte-kit/generated/server/internal.js": {
     "file": "internal.js",
+    "name": "internal",
     "src": ".svelte-kit/generated/server/internal.js",
     "isEntry": true,
     "imports": [
@@ -9,6 +10,7 @@
   },
   "_Header.js": {
     "file": "chunks/Header.js",
+    "name": "Header",
     "imports": [
       "_ssr.js",
       "_stores.js",
@@ -19,39 +21,59 @@
     ]
   },
   "_app.js": {
-    "file": "_app/immutable/assets/app.Cr_TgnRH.css",
+    "file": "_app/immutable/assets/app.U4gmxPyt.css",
     "src": "_app.js"
   },
   "_authStore.js": {
     "file": "chunks/authStore.js",
+    "name": "authStore",
     "imports": [
       "_index.js",
       "_firebase.client.js"
     ]
   },
   "_exports.js": {
-    "file": "chunks/exports.js"
+    "file": "chunks/exports.js",
+    "name": "exports"
   },
   "_firebase.client.js": {
-    "file": "chunks/firebase.client.js"
+    "file": "chunks/firebase.client.js",
+    "name": "firebase.client"
+  },
+  "_hangmanImagesNeutral.js": {
+    "file": "chunks/hangmanImagesNeutral.js",
+    "name": "hangmanImagesNeutral",
+    "assets": [
+      "_app/immutable/assets/hangman_head_neutral.4aLx9pWe.png",
+      "_app/immutable/assets/hangman_body_neutral.od90h9l4.png",
+      "_app/immutable/assets/hangman_first_leg_neutral.AzGBVrTd.png",
+      "_app/immutable/assets/hangman_second_leg_neutral.jg4-QQto.png",
+      "_app/immutable/assets/hangman_first_arm_neutral.BrlJK4Q9.png",
+      "_app/immutable/assets/hangman_second_arm_neutral.CM4TNkXe.png",
+      "_app/immutable/assets/hangman_face_neutral.B6TkzGK3.png"
+    ]
   },
   "_index.js": {
     "file": "chunks/index.js",
+    "name": "index",
     "imports": [
       "_ssr.js"
     ]
   },
   "_internal.js": {
     "file": "chunks/internal.js",
+    "name": "internal",
     "imports": [
       "_ssr.js"
     ]
   },
   "_ssr.js": {
-    "file": "chunks/ssr.js"
+    "file": "chunks/ssr.js",
+    "name": "ssr"
   },
   "_stores.js": {
     "file": "chunks/stores.js",
+    "name": "stores",
     "imports": [
       "_ssr.js",
       "_exports.js"
@@ -59,6 +81,7 @@
   },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
     "file": "entries/fallbacks/error.svelte.js",
+    "name": "entries/fallbacks/error.svelte",
     "src": "node_modules/@sveltejs/kit/src/runtime/components/error.svelte",
     "isEntry": true,
     "imports": [
@@ -68,6 +91,7 @@
   },
   "node_modules/@sveltejs/kit/src/runtime/server/index.js": {
     "file": "index.js",
+    "name": "index",
     "src": "node_modules/@sveltejs/kit/src/runtime/server/index.js",
     "isEntry": true,
     "imports": [
@@ -114,6 +138,7 @@
   },
   "src/routes/+layout.svelte": {
     "file": "entries/pages/_layout.svelte.js",
+    "name": "entries/pages/_layout.svelte",
     "src": "src/routes/+layout.svelte",
     "isEntry": true,
     "imports": [
@@ -121,20 +146,23 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.Cr_TgnRH.css"
+      "_app/immutable/assets/app.U4gmxPyt.css"
     ]
   },
   "src/routes/+page.svelte": {
     "file": "entries/pages/_page.svelte.js",
+    "name": "entries/pages/_page.svelte",
     "src": "src/routes/+page.svelte",
     "isEntry": true,
     "imports": [
       "_ssr.js",
-      "_Header.js"
+      "_Header.js",
+      "_hangmanImagesNeutral.js"
     ]
   },
   "src/routes/account/+layout.svelte": {
     "file": "entries/pages/account/_layout.svelte.js",
+    "name": "entries/pages/account/_layout.svelte",
     "src": "src/routes/account/+layout.svelte",
     "isEntry": true,
     "imports": [
@@ -142,11 +170,12 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.Cr_TgnRH.css"
+      "_app/immutable/assets/app.U4gmxPyt.css"
     ]
   },
   "src/routes/account/+page.svelte": {
     "file": "entries/pages/account/_page.svelte.js",
+    "name": "entries/pages/account/_page.svelte",
     "src": "src/routes/account/+page.svelte",
     "isEntry": true,
     "imports": [
@@ -157,6 +186,7 @@
   },
   "src/routes/login/+layout.svelte": {
     "file": "entries/pages/login/_layout.svelte.js",
+    "name": "entries/pages/login/_layout.svelte",
     "src": "src/routes/login/+layout.svelte",
     "isEntry": true,
     "imports": [
@@ -164,11 +194,12 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.Cr_TgnRH.css"
+      "_app/immutable/assets/app.U4gmxPyt.css"
     ]
   },
   "src/routes/login/+page.svelte": {
     "file": "entries/pages/login/_page.svelte.js",
+    "name": "entries/pages/login/_page.svelte",
     "src": "src/routes/login/+page.svelte",
     "isEntry": true,
     "imports": [
@@ -181,6 +212,7 @@
   },
   "src/routes/play/+layout.svelte": {
     "file": "entries/pages/play/_layout.svelte.js",
+    "name": "entries/pages/play/_layout.svelte",
     "src": "src/routes/play/+layout.svelte",
     "isEntry": true,
     "imports": [
@@ -188,27 +220,20 @@
       "_firebase.client.js"
     ],
     "css": [
-      "_app/immutable/assets/app.Cr_TgnRH.css"
+      "_app/immutable/assets/app.U4gmxPyt.css"
     ]
   },
   "src/routes/play/+page.svelte": {
     "file": "entries/pages/play/_page.svelte.js",
+    "name": "entries/pages/play/_page.svelte",
     "src": "src/routes/play/+page.svelte",
     "isEntry": true,
     "imports": [
       "_ssr.js",
       "_Header.js",
+      "_hangmanImagesNeutral.js",
       "_index.js",
       "_firebase.client.js"
-    ],
-    "assets": [
-      "_app/immutable/assets/hangman_head_neutral.4aLx9pWe.png",
-      "_app/immutable/assets/hangman_body_neutral.od90h9l4.png",
-      "_app/immutable/assets/hangman_first_leg_neutral.AzGBVrTd.png",
-      "_app/immutable/assets/hangman_second_leg_neutral.jg4-QQto.png",
-      "_app/immutable/assets/hangman_first_arm_neutral.BrlJK4Q9.png",
-      "_app/immutable/assets/hangman_second_arm_neutral.CM4TNkXe.png",
-      "_app/immutable/assets/hangman_face_neutral.B6TkzGK3.png"
     ]
   }
 }

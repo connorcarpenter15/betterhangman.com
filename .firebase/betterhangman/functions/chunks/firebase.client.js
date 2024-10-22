@@ -25,3 +25,7 @@ getFirestore(app);
 const functions = getFunctions(app, "us-east1");
 httpsCallable(functions, "get_random_word");
 httpsCallable(functions, "create_user");
+httpsCallable(
+  functions,
+  "check_username_availability"
+);
